@@ -15,10 +15,10 @@ let Track = (props) => {
   let duration = toHHSS(props.duration);
   return <div className={cname} onClick={props.onClick}>
           <div className="track-left">
-            <div className="track-title">{props.title}</div>
-            <div className="track-performer">{props.performer}</div>
+            <div className="title">{props.title}</div>
+            <div className="performer">{props.performer || "Unknown"}</div>
           </div>
-          <div className="track-duration">{duration}</div>
+          <div className="duration">{duration}</div>
          </div>
 }
 
@@ -47,7 +47,7 @@ let Playhead = (props) => {
     width: props.playPerc + "%"
   }
   return <div className="playhead">
-          <div className="playhead-bar" style={style}>
+          <div style={style}>
           </div>
          </div>
 }

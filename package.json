@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "browserify --debug ui/main.js -o dist/ui.js",
-    "watchify": "watchify --debug ui/main.js -o dist/ui.js"
+    "compile": "browserify --debug ui/main.js -o dist/ui.js -p [parcelify -o dist/style.css -t less-css-stream]",
+    "watchify": "watchify --debug ui/main.js -o dist/ui.js -p [parcelify -wo dist/style.css -t less-css-stream]"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,9 @@
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
+    "less": "^2.5.3",
+    "less-css-stream": "^1.0.0",
+    "parcelify": "^2.1.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "underscore": "^1.8.3",
@@ -27,6 +30,12 @@
     "express": "^4.13.3",
     "request": "^2.67.0"
   },
+  "style": [
+    "./ui/*.less"
+  ],
+  "transforms": [
+    "less-css-stream"
+  ],
   "browserify": {
     "transform": [
       [
