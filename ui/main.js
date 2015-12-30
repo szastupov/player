@@ -23,10 +23,23 @@ let Track = (props) => {
 }
 
 
-let SearchBox = (props) => {
-  return <div className="search-box">
-          <input type="text" placeholder="Search..." onChange={props.search}/>
-         </div>
+class SearchBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.search = _.debounce(this.search, 200);
+  }
+
+  render() {
+    return <div className="search-box">
+            <input type="text" placeholder="Search..."
+              onChange={this.search.bind(this)}/>
+           </div>
+  }
+
+  search(ev) {
+    let text = ev.target.value.trim();
+    this.props.search(text)
+  }
 }
 
 let Playhead = (props) => {
@@ -72,8 +85,6 @@ class App extends React.Component {
       playPerc: 0
     }
 
-    this.search = _.debounce(this.search, 200);
-
     this.loadTracks();
   }
 
@@ -113,8 +124,7 @@ class App extends React.Component {
       .catch(ex => console.error('parsing failed', ex));
   }
 
-  search(ev) {
-    let text = ev.target.value;
+  search(text) {
     console.log("searching", text);
     this.loadTracks(text);
   }
@@ -159,19 +169,20 @@ class App extends React.Component {
 
   togglePlay() {
     let audio = this.state.audio;
-    if (audio) {
-      if (this.state.playing) {
-        audio.pause();
-      } else {
-        audio.play();
-      }
-
-      this.setState({
-        playing: !this.state.playing
-      })
-    } else {
+    if (!audio) {
       this.playTrack(0);
+      return;
     }
+
+    if (this.state.playing) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+
+    this.setState({
+      playing: !this.state.playing
+    })
   }
 
   backward() {
