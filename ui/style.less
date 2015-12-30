@@ -53,13 +53,14 @@ html, body {
   padding: 1em;
 
   input {
-    font-size: @item-font-size;
+    font-size: 1.8em;
     width: 100%;
 
     padding: 6px 12px;
     color: #555;
     border: none;
     border-bottom: 1px solid #ccc;
+    border-radius: 0px;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   }
 
@@ -73,6 +74,7 @@ html, body {
   border-bottom: thin solid LightGray;
   padding: 0.7em 1.7em;
   cursor: pointer;
+  transition: background-color ease-out .30s;
 
   &:hover {
     background-color: @nice-grey;
