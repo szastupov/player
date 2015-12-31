@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import _ from 'underscore'
 require('whatwg-fetch');
+require("./style.less");
 
 function toHHSS(sec) {
   let hours = parseInt(sec / 3600) % 24;
@@ -135,6 +136,11 @@ class App extends React.Component {
     let track = tracks[index];
 
     if (track.file_id === this.state.current_file) {
+      if (this.state.playing) {
+        this.state.audio.pause();
+      } else {
+        this.state.audio.play();
+      }
       return;
     }
 

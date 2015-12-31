@@ -5,24 +5,25 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "browserify --debug ui/main.js -o dist/ui.js -p [parcelify -o dist/style.css -t less-css-stream]",
-    "watchify": "watchify --debug ui/main.js -o dist/ui.js -p [parcelify -wo dist/style.css -t less-css-stream]"
+    "build": "webpack --progress",
+    "watch": "webpack -w --progress"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
-    "babelify": "^7.2.0",
-    "browserify": "^12.0.1",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^0.9.1",
     "less": "^2.5.3",
-    "less-css-stream": "^1.0.0",
-    "parcelify": "^2.1.0",
+    "less-loader": "^2.2.2",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
+    "style-loader": "^0.13.0",
     "underscore": "^1.8.3",
-    "watchify": "^3.6.1",
+    "webpack": "^1.12.9",
     "whatwg-fetch": "^0.10.1"
   },
   "dependencies": {
@@ -30,24 +31,5 @@
     "express": "^4.13.3",
     "morgan": "^1.6.1",
     "request": "^2.67.0"
-  },
-  "style": [
-    "./ui/*.less"
-  ],
-  "transforms": [
-    "less-css-stream"
-  ],
-  "browserify": {
-    "transform": [
-      [
-        "babelify",
-        {
-          "presets": [
-            "react",
-            "babel-preset-es2015"
-          ]
-        }
-      ]
-    ]
   }
 }
