@@ -53,24 +53,6 @@ let Playhead = (props) => {
          </div>
 }
 
-let PlayerControls = (props) => {
-  let pname;
-  if (props.playing) {
-    pname = "fa fa-pause";
-  } else if (props.loading) {
-    pname = "fa fa-spinner fa-spin"
-  } else {
-    pname = "fa fa-play";
-  }
-
-  return <footer className="player-controls">
-          <Playhead playPerc={props.playPerc}/>
-          <i className="fa fa-backward" onClick={props.backward}></i>
-          <i className={pname} onClick={props.togglePlay}></i>
-          <i className="fa fa-forward" onClick={props.forward}></i>
-          <i className="fa fa-heart-o"></i>
-         </footer>
-}
 
 class App extends React.Component {
   constructor(props) {
@@ -89,26 +71,43 @@ class App extends React.Component {
     this.loadTracks();
   }
 
-  render() {
-    let tracks = this.state.tracks.map((t, i) => {
-      return <Track {...t} key={t.file_id}
-              active={t.file_id == this.state.current_file}
-              onClick={this.playTrack.bind(this, i)}
-             />
-    })
+  renderControls() {
+    let pname;
+    if (this.state.playing) {
+      pname = "fa fa-pause";
+    } else if (this.state.loading) {
+      pname = "fa fa-spinner fa-spin"
+    } else {
+      pname = "fa fa-play";
+    }
 
+    return <footer className="player-controls">
+            <Playhead playPerc={this.state.playPerc}/>
+            <i className="fa fa-backward"
+              onClick={this.jump.bind(this, -1)}></i>
+            <i className={pname}
+              onClick={this.togglePlay.bind(this)}></i>
+            <i className="fa fa-forward"
+              onClick={this.jump.bind(this, 1)}></i>
+            <i className="fa fa-heart-o"></i>
+           </footer>
+  }
+
+  renderTracks() {
+    return this.state.tracks.map((t, i) =>
+      <Track {...t} key={t.file_id}
+        active={t.file_id == this.state.current_file}
+        onClick={this.playTrack.bind(this, i)}
+      />)
+  }
+
+  render() {
     return <div id="app">
             <div className="scrollable">
               <SearchBox search={this.search.bind(this)}/>
-              <div className="track-list">{tracks}</div>
+              <div className="track-list">{this.renderTracks()}</div>
             </div>
-            <PlayerControls
-              playing={this.state.playing}
-              loading={this.state.loading}
-              playPerc={this.state.playPerc}
-              backward={this.backward.bind(this)}
-              forward={this.forward.bind(this)}
-              togglePlay={this.togglePlay.bind(this)}/>
+            {this.renderControls()}
            </div>
   }
 
@@ -191,20 +190,12 @@ class App extends React.Component {
     })
   }
 
-  backward() {
+  jump(i) {
     let audio = this.state.audio;
     if (!audio) {
       return;
     }
-    this.playTrack(this.state.current_track - 1);
-  }
-
-  forward() {
-    let audio = this.state.audio;
-    if (!audio) {
-      return;
-    }
-    this.playTrack(this.state.current_track + 1);
+    this.playTrack(this.state.current_track + i);
   }
 }
 
