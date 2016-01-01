@@ -100,7 +100,7 @@ export class Player extends React.Component {
   }
 
   render() {
-    return <div id="app">
+    return <div id="player">
             <div className="scrollable">
               <SearchBox search={this.search.bind(this)}/>
               <div className="track-list">{this.renderTracks()}</div>
@@ -114,7 +114,6 @@ export class Player extends React.Component {
     if (query) {
       url += '?text=' + query;
     }
-    console.log(url);
 
     fetch(url)
       .then(r => r.json())
