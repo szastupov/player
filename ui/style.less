@@ -56,11 +56,10 @@ html, body {
 
 .search-box {
   padding: 1em;
+  font-size: 1.8em;
 
   input {
-    font-size: 1.8em;
     width: 100%;
-
     padding: 6px 12px;
     color: #555;
     border: none;
@@ -72,6 +71,20 @@ html, body {
   input:focus {
     border-color: #66afe9;
     outline: 0;
+  }
+
+  input:not(:valid) ~ button {
+    display: none;
+  }
+
+  button {
+    cursor: pointer;
+    position: relative;
+    float: right;
+    margin-right: 6px;
+    margin-top: -1.5em;
+    border: none;
+    background: none;
   }
 }
 

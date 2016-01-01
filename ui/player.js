@@ -31,8 +31,14 @@ class SearchBox extends React.Component {
 
   render() {
     return <div className="search-box">
+            <form onSubmit={e => e.preventDefault()}>
             <input type="text" placeholder="Search..."
+              required={true}
               onChange={this.search.bind(this)}/>
+            <button className="fa fa-times" type="reset"
+              onClick={() => this.props.search("")}>
+            </button>
+            </form>
            </div>
   }
 
