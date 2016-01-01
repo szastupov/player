@@ -7,7 +7,7 @@ function toHHSS(sec) {
   let hours = parseInt(sec / 3600) % 24;
   let minutes = parseInt(sec / 60) % 60;
   let seconds = sec % 60;
-  return minutes + ':' + seconds;
+  return minutes + ':' + ((seconds < 10) ? '0' + seconds : seconds);
 }
 
 let Track = (props) => {
@@ -38,7 +38,7 @@ class SearchBox extends React.Component {
 
   search(ev) {
     let text = ev.target.value.trim();
-    this.props.search(text)
+    this.props.search(text);
   }
 }
 
@@ -74,7 +74,7 @@ export class Player extends React.Component {
     if (this.state.playing) {
       pname = "fa fa-pause";
     } else if (this.state.loading) {
-      pname = "fa fa-spinner fa-spin"
+      pname = "fa fa-spinner fa-spin";
     } else {
       pname = "fa fa-play";
     }
@@ -172,8 +172,7 @@ export class Player extends React.Component {
   togglePlay() {
     let audio = this.state.audio;
     if (!audio) {
-      this.playTrack(0);
-      return;
+      return this.playTrack(0);
     }
 
     if (this.state.playing) {
