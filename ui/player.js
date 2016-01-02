@@ -48,12 +48,12 @@ class SearchBox extends React.Component {
   }
 }
 
-let Playhead = (props) => {
-  let style = {
-    width: props.playPerc + "%"
-  }
-  return <div className="playhead">
-          <div style={style}>
+let Ruler = (props) => {
+  let pc = props.playPerc + "%";
+
+  let onClick = (ev) => props.seek(ev.clientX / ev.target.clientWidth);
+  return <div className="ruler" onClick={onClick}>
+          <div style={{width: pc}}>
           </div>
          </div>
 }
@@ -69,6 +69,7 @@ export class Player extends React.Component {
       audio: null,
       playing: false,
       loading: false,
+      duration: 0,
       playPerc: 0
     }
 
@@ -86,7 +87,9 @@ export class Player extends React.Component {
     }
 
     return <footer className="player-controls">
-            <Playhead playPerc={this.state.playPerc}/>
+            <Ruler
+              seek={this.seek.bind(this)}
+              playPerc={this.state.playPerc}/>
             <i className="fa fa-backward"
               onClick={this.jump.bind(this, -1)}></i>
             <i className={pname}
@@ -149,7 +152,8 @@ export class Player extends React.Component {
     console.log("Playing ", track.performer, track.title, track.file_id);
     this.setState({
       current_file: track.file_id,
-      current_track: index
+      current_track: index,
+      duration: track.duration
     });
 
     let file_url = "/files/" + track.file_id;
@@ -173,6 +177,14 @@ export class Player extends React.Component {
     this.setState({ audio: audio });
 
     audio.play();
+  }
+
+  seek(scale) {
+    let pos = parseInt(scale * this.state.duration);
+    console.log("seek", pos);
+    if (this.state.audio) {
+      this.state.audio.currentTime = pos;
+    }
   }
 
   togglePlay() {

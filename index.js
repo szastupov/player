@@ -17,8 +17,10 @@ app.get("/tracks", (req, res) => {
 })
 
 app.get("/files/:file_id", (req, res) => {
-  request.get(app.get('bot') + '/files/' + req.params.file_id)
-         .pipe(res);
+  request.get({
+    url: app.get('bot') + '/files/' + req.params.file_id,
+    headers: req.headers
+  }).pipe(res);
 })
 
 app.listen(app.get('port'));
