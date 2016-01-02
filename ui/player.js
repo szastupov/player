@@ -53,8 +53,8 @@ let Ruler = (props) => {
 
   let onClick = (ev) => props.seek(ev.clientX / ev.target.clientWidth);
   return <div className="ruler" onClick={onClick}>
-          <div style={{width: pc}}>
-          </div>
+          <div className="bar" style={{width: pc}}/>
+          <div className="playhead" style={{left: pc}}/>
          </div>
 }
 

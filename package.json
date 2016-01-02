@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./index.js",
-    "build": "webpack -p --progress",
+    "dist": "webpack -p --progress",
     "watch": "webpack -w --progress"
   },
   "keywords": [],
