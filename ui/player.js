@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Loader from './loader'
 import _ from 'underscore'
 
 
@@ -10,7 +11,7 @@ function toHHSS(sec) {
   return minutes + ':' + ((seconds < 10) ? '0' + seconds : seconds);
 }
 
-let Track = (props) => {
+const Track = (props) => {
   let cname = props.active ? "track active" : "track";
   let duration = toHHSS(props.duration);
   return <div className={cname} onClick={props.onClick}>
@@ -48,7 +49,7 @@ class SearchBox extends React.Component {
   }
 }
 
-let Ruler = (props) => {
+const Ruler = (props) => {
   let pc = props.playPerc + "%";
 
   let onClick = (ev) => props.seek(ev.clientX / ev.target.clientWidth);
@@ -57,6 +58,7 @@ let Ruler = (props) => {
           <div className="playhead" style={{left: pc}}/>
          </div>
 }
+
 
 export class Player extends React.Component {
   constructor(props) {
@@ -72,7 +74,9 @@ export class Player extends React.Component {
       playPerc: 0
     }
 
+    this.loader = new Loader();
     this.loadTracks();
+    this.scrollBreak = 0;
   }
 
   renderControls() {
@@ -108,7 +112,7 @@ export class Player extends React.Component {
 
   render() {
     return <div id="player">
-            <div className="scrollable">
+            <div className="scrollable" ref="scrollable">
               <SearchBox search={this.search.bind(this)}/>
               <div className="track-list">{this.renderTracks()}</div>
             </div>
@@ -116,21 +120,30 @@ export class Player extends React.Component {
            </div>
   }
 
-  loadTracks(query) {
-    let url = '/tracks';
-    if (query) {
-      url += '?text=' + query;
-    }
+  componentDidMount() {
+    let view = this.refs.scrollable;
+    view.addEventListener("scroll", ev => {
+      let scrolled = view.scrollHeight - view.scrollTop <= view.clientHeight;
+      if (scrolled &&
+          view.scrollHeight > this.scrollBreak &&
+          this.loader.hasMore())
+      {
+        console.log("load more");
+        this.scrollBreak = view.scrollHeight;
+        this.loadTracks();
+      }
+    })
+  }
 
-    fetch(url)
-      .then(r => r.json())
-      .then(result => this.setState({ tracks: result["tracks"] }))
-      .catch(ex => console.error('Failed to load tracks', ex));
+  loadTracks() {
+    this.loader.load().then(tracks => this.setState({ tracks }))
   }
 
   search(text) {
     console.log("searching", text);
-    this.loadTracks(text);
+    this.loader = new Loader(text);
+    this.loadTracks();
+    this.scrollBreak = 0;
   }
 
   playTrack(index) {
