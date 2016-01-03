@@ -6,7 +6,7 @@ export default class Loader {
   }
 
   load() {
-    let url = `/tracks?offset=${this.tracks.length}&limit=20`;
+    let url = `./tracks?offset=${this.tracks.length}&limit=20`;
     if (this.query) {
       url += '&text=' + this.query;
     }
