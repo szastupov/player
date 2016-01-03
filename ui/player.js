@@ -11,23 +11,14 @@ function toHHSS(sec) {
   return minutes + ':' + ((seconds < 10) ? '0' + seconds : seconds);
 }
 
-const Track = (props) => {
-  let cname = props.active ? "track active" : "track";
-  let duration = toHHSS(props.duration);
-  return <div className={cname} onClick={props.onClick}>
-          <div className="track-left">
-            <div className="title">{props.title}</div>
-            <div className="performer">{props.performer || "Unknown"}</div>
-          </div>
-          <div className="duration">{duration}</div>
-         </div>
+function mod(n, m) {
+  return ((n % m) + m) % m;
 }
 
 
 class SearchBox extends React.Component {
   constructor(props) {
     super(props);
-    this.search = _.debounce(this.search, 200);
   }
 
   render() {
@@ -35,17 +26,13 @@ class SearchBox extends React.Component {
             <form onSubmit={e => e.preventDefault()}>
             <input type="text" placeholder="Search..."
               required={true}
-              onChange={this.search.bind(this)}/>
+              value={this.props.query}
+              onChange={ev => this.props.search(ev.target.value, true)}/>
             <button className="fa fa-times" type="reset"
               onClick={() => this.props.search("")}>
             </button>
             </form>
            </div>
-  }
-
-  search(ev) {
-    let text = ev.target.value.trim();
-    this.props.search(text);
   }
 }
 
@@ -68,6 +55,8 @@ export class Player extends React.Component {
       current_file: -1,
       current_track: -1,
 
+      query: "",
+
       audio: null,
       playback: "paused", // playing, paused, loading, error
       duration: 0,
@@ -77,6 +66,8 @@ export class Player extends React.Component {
     this.loader = new Loader();
     this.loadTracks();
     this.scrollBreak = 0;
+
+    this.reload_debounced = _.debounce(this.reload, 200);
   }
 
   renderControls() {
@@ -103,17 +94,33 @@ export class Player extends React.Component {
   }
 
   renderTracks() {
-    return this.state.tracks.map((t, i) =>
-      <Track {...t} key={t.file_id}
-        active={t.file_id == this.state.current_file}
-        onClick={this.playTrack.bind(this, i)}
-      />)
+    return this.state.tracks.map((t, i) => {
+      let active = t.file_id == this.state.current_file;
+      let cname = active ? "track active" : "track";
+      let search = (e) => {
+        this.search('"' + t.performer + '"');
+        e.stopPropagation();
+      }
+
+      return <div className={cname} key={t.file_id}
+                  onClick={this.playTrack.bind(this, i)}>
+              <div className="track-left">
+                <div className="title">{t.title}</div>
+                <a href="#" className="performer" onClick={search}>
+                  {t.performer || "Unknown"}
+                </a>
+              </div>
+              <div className="duration">{toHHSS(t.duration)}</div>
+             </div>
+    })
   }
 
   render() {
     return <div id="player">
             <div className="scrollable" ref="scrollable">
-              <SearchBox search={this.search.bind(this)}/>
+              <SearchBox
+                search={this.search.bind(this)}
+                query={this.state.query}/>
               <div className="track-list">{this.renderTracks()}</div>
             </div>
             {this.renderControls()}
@@ -140,16 +147,26 @@ export class Player extends React.Component {
     this.loader.load().then(tracks => this.setState({ tracks }))
   }
 
-  search(text) {
+  reload(text) {
     console.log("searching", text);
     this.loader = new Loader(text);
     this.loadTracks();
     this.scrollBreak = 0;
   }
 
+  search(text, debounce) {
+    this.setState({ query: text });
+
+    if (debounce) {
+      this.reload_debounced(text);
+    } else {
+      this.reload(text);
+    }
+  }
+
   playTrack(index) {
     let tracks = this.state.tracks;
-    index = index % tracks.length;
+    index = mod(index, tracks.length);
     let track = tracks[index];
 
     if (track.file_id === this.state.current_file) {
@@ -221,9 +238,6 @@ export class Player extends React.Component {
 
   jump(i) {
     let audio = this.state.audio;
-    if (!audio) {
-      return;
-    }
-    this.playTrack(this.state.current_track + i);
+    this.playTrack(audio ? this.state.current_track + i : 0);
   }
 }
