@@ -57,7 +57,6 @@ export class Player extends React.Component {
 
       query: "",
 
-      audio: null,
       playback: "paused", // playing, paused, loading, error
       duration: 0,
       playPerc: 0
@@ -68,6 +67,28 @@ export class Player extends React.Component {
     this.scrollBreak = 0;
 
     this.reload_debounced = _.debounce(this.reload, 200);
+
+    this.initAudio();
+
+  }
+
+  initAudio() {
+    let audio = this.audio = new Audio();
+    let aon = (ev, listener) => audio.addEventListener(ev, listener)
+
+    aon("error", () => {
+      console.error("audio error", audio.error);
+      this.setState({ playback: "error" });
+    })
+    aon("loadstart", () => this.setState({ playback: "loading" }))
+    aon("pause", () => this.setState({ playback: "paused" }))
+    aon("playing", () => this.setState({ playback: "playing" }))
+    aon("ended", () => this.jump(1))
+    aon("timeupdate", () => {
+      this.setState({
+        playPerc: parseInt(audio.currentTime*100 / this.state.duration)
+      })
+    })
   }
 
   renderControls() {
@@ -172,9 +193,9 @@ export class Player extends React.Component {
     if (track.file_id === this.state.current_file) {
       switch (this.state.playback) {
         case "playing":
-          return this.state.audio.pause();
+          return this.audio.pause();
         default:
-          return this.state.audio.play();
+          return this.audio.play();
       }
     }
 
@@ -186,58 +207,33 @@ export class Player extends React.Component {
     });
 
     let file_url = "/files/" + track.file_id;
-    let audio = new Audio(file_url);
-
-    audio.addEventListener("timeupdate", () => {
-      this.setState({
-        playPerc: parseInt(audio.currentTime*100 / track.duration)
-      })
-    })
-
-    audio.addEventListener("error", () => {
-      console.error("audio error", audio.error);
-      this.setState({ playback: "error" });
-    })
-
-    audio.addEventListener("loadstart", () => this.setState({ playback: "loading" }))
-    audio.addEventListener("pause", () => this.setState({ playback: "paused" }))
-    audio.addEventListener("playing", () => this.setState({ playback: "playing" }))
-    audio.addEventListener("ended", () => this.jump(1))
-
-    if (this.state.audio) {
-      this.state.audio.pause();
-    }
-    this.setState({ audio: audio });
-
-    audio.play();
+    this.audio.src = file_url;
+    this.audio.load();
+    this.audio.play();
   }
 
   seek(scale) {
     let pos = parseInt(scale * this.state.duration);
     console.log("seek", pos);
-    if (this.state.audio) {
-      this.state.audio.currentTime = pos;
-    }
+    this.audio.currentTime = pos;
   }
 
   togglePlay() {
-    let audio = this.state.audio;
-    if (!audio) {
+    if (this.state.current_track === -1) {
       return this.playTrack(0);
     }
 
     switch (this.state.playback) {
       case "playing":
-        audio.pause();
+        this.audio.pause();
         break;
       case "paused":
-        audio.play();
+        this.audio.play();
         break;
     }
   }
 
   jump(i) {
-    let audio = this.state.audio;
-    this.playTrack(audio ? this.state.current_track + i : 0);
+    this.playTrack(this.state.current_track + i);
   }
 }
