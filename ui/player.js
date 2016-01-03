@@ -22,7 +22,7 @@ class SearchBox extends React.Component {
   }
 
   render() {
-    return <div className="search-box">
+    return <div className="search-box container">
             <form onSubmit={e => e.preventDefault()}>
             <input type="text" placeholder="Search..."
               required={true}
@@ -143,7 +143,7 @@ export class Player extends React.Component {
               <SearchBox
                 search={this.search.bind(this)}
                 query={this.state.query}/>
-              <div className="track-list">{this.renderTracks()}</div>
+              <div className="track-list container">{this.renderTracks()}</div>
             </div>
             {this.renderControls()}
            </div>
@@ -152,7 +152,7 @@ export class Player extends React.Component {
   componentDidMount() {
     let view = this.refs.scrollable;
     view.addEventListener("scroll", ev => {
-      let scrollBreak = view.scrollHeight - 70;
+      let scrollBreak = view.scrollHeight - 140;
       let scrolled = scrollBreak - view.scrollTop <= view.clientHeight;
       if (scrolled &&
           scrollBreak > this.scrollBreak &&
