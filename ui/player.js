@@ -25,6 +25,7 @@ class SearchBox extends React.Component {
     return <div className="search-box container">
             <form onSubmit={e => e.preventDefault()}>
             <input type="text" placeholder="Search..."
+              autoFocus={true}
               required={true}
               value={this.props.query}
               onChange={ev => this.props.search(ev.target.value, true)}/>
@@ -105,13 +106,18 @@ export class Player extends React.Component {
             <Ruler
               seek={this.seek.bind(this)}
               playPerc={this.state.playPerc}/>
-            <i className="fa fa-backward"
-              onClick={this.jump.bind(this, -1)}></i>
-            <i className={pname}
-              onClick={this.togglePlay.bind(this)}></i>
-            <i className="fa fa-forward"
-              onClick={this.jump.bind(this, 1)}></i>
-            <i className="fa fa-heart-o"></i>
+            <button onClick={this.jump.bind(this, -1)}>
+              <i className="fa fa-backward"></i>
+            </button>
+            <button onClick={this.togglePlay.bind(this)}>
+              <i className={pname}></i>
+            </button>
+            <button onClick={this.jump.bind(this, 1)}>
+              <i className="fa fa-forward"></i>
+            </button>
+            <button>
+              <i className="fa fa-heart-o"></i>
+            </button>
            </footer>
   }
 
