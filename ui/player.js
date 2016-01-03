@@ -85,9 +85,10 @@ export class Player extends React.Component {
     aon("playing", () => this.setState({ playback: "playing" }))
     aon("ended", () => this.jump(1))
     aon("timeupdate", () => {
-      this.setState({
-        playPerc: parseInt(audio.currentTime*100 / this.state.duration)
-      })
+      let newpos = parseInt(audio.currentTime*100 / this.state.duration);
+      if (newpos !== this.state.playPerc) {
+        this.setState({ playPerc: newpos });
+      }
     })
   }
 
