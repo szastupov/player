@@ -67,8 +67,7 @@ export class Player extends React.Component {
       current_track: -1,
 
       audio: null,
-      playing: false,
-      loading: false,
+      playback: "paused", // playing, paused, loading, error
       duration: 0,
       playPerc: 0
     }
@@ -77,14 +76,13 @@ export class Player extends React.Component {
   }
 
   renderControls() {
-    let pname;
-    if (this.state.playing) {
-      pname = "fa fa-pause";
-    } else if (this.state.loading) {
-      pname = "fa fa-spinner fa-spin";
-    } else {
-      pname = "fa fa-play";
+    const stateMap = {
+      playing: "fa fa-pause",
+      error: "fa fa-exclamation-circle",
+      loading: "fa fa-spinner fa-spin",
+      paused: "fa fa-play"
     }
+    let pname = stateMap[this.state.playback]
 
     return <footer className="player-controls">
             <Ruler
@@ -126,8 +124,8 @@ export class Player extends React.Component {
 
     fetch(url)
       .then(r => r.json())
-      .then(tracks => this.setState({ tracks: tracks }))
-      .catch(ex => console.error('parsing failed', ex));
+      .then(result => this.setState({ tracks: result["tracks"] }))
+      .catch(ex => console.error('Failed to load tracks', ex));
   }
 
   search(text) {
@@ -141,12 +139,12 @@ export class Player extends React.Component {
     let track = tracks[index];
 
     if (track.file_id === this.state.current_file) {
-      if (this.state.playing) {
-        this.state.audio.pause();
-      } else {
-        this.state.audio.play();
+      switch (this.state.playback) {
+        case "playing":
+          return this.state.audio.pause();
+        default:
+          return this.state.audio.play();
       }
-      return;
     }
 
     console.log("Playing ", track.performer, track.title, track.file_id);
@@ -165,10 +163,14 @@ export class Player extends React.Component {
       })
     })
 
-    audio.addEventListener("loadstart", () => this.setState({ loading: true }))
-    audio.addEventListener("canplay", () => this.setState({ loading: false }))
-    audio.addEventListener("pause", () => this.setState({ playing: false }))
-    audio.addEventListener("playing", () => this.setState({ playing: true }))
+    audio.addEventListener("error", () => {
+      console.error("audio error", audio.error);
+      this.setState({ playback: "error" });
+    })
+
+    audio.addEventListener("loadstart", () => this.setState({ playback: "loading" }))
+    audio.addEventListener("pause", () => this.setState({ playback: "paused" }))
+    audio.addEventListener("playing", () => this.setState({ playback: "playing" }))
     audio.addEventListener("ended", () => this.jump(1))
 
     if (this.state.audio) {
@@ -193,15 +195,14 @@ export class Player extends React.Component {
       return this.playTrack(0);
     }
 
-    if (this.state.playing) {
-      audio.pause();
-    } else {
-      audio.play();
+    switch (this.state.playback) {
+      case "playing":
+        audio.pause();
+        break;
+      case "paused":
+        audio.play();
+        break;
     }
-
-    this.setState({
-      playing: !this.state.playing
-    })
   }
 
   jump(i) {
