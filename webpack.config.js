@@ -35,5 +35,13 @@ module.exports = {
   plugins: [
     // extract inline css into separate 'styles.css'
     new ExtractTextPlugin('styles.css')
-  ]
+  ],
+
+  devServer: {
+    contentBase: "dist",
+    proxy: {
+      "*": process.env.BOT_URL
+    },
+    noInfo: true
+  }
 }
