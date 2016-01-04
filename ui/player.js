@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Loader from './loader'
-import _ from 'underscore'
+import debounce from 'lodash.debounce';
 
 
 function toHHSS(sec) {
@@ -67,7 +67,7 @@ export class Player extends React.Component {
     this.loadTracks();
     this.scrollBreak = 0;
 
-    this.reload_debounced = _.debounce(this.reload, 200);
+    this.reload_debounced = debounce(this.reload, 200);
 
     this.initAudio();
 
@@ -182,10 +182,10 @@ export class Player extends React.Component {
     this.scrollBreak = 0;
   }
 
-  search(text, debounce) {
+  search(text, debounced) {
     this.setState({ query: text });
 
-    if (debounce) {
+    if (debounced) {
       this.reload_debounced(text);
     } else {
       this.reload(text);
