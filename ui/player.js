@@ -213,6 +213,8 @@ export class Player extends React.Component {
       duration: track.duration
     });
 
+    document.title = `${track.title} by ${track.performer}`;
+
     let file_url = "./files/" + track.file_id;
     this.audio.src = file_url;
     this.audio.load();
