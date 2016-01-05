@@ -1,7 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Loader from './loader'
-import debounce from 'lodash.debounce';
+import _ from 'lodash'
+import LastFM from './lastfm'
+
+
+const lastfm = new LastFM("2de5147bbf48165a1fe12dc052afb725")
 
 
 function toHHSS(sec) {
@@ -16,26 +20,21 @@ function mod(n, m) {
 }
 
 
-class SearchBox extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <div className="search-box container">
-            <form onSubmit={e => e.preventDefault()}>
-            <input type="text" placeholder="Search..."
-              autoFocus={true}
-              required={true}
-              value={this.props.query}
-              onChange={ev => this.props.search(ev.target.value, true)}/>
-            <button className="fa fa-times" type="reset"
-              onClick={() => this.props.search("")}>
-            </button>
-            </form>
-           </div>
-  }
+const SearchBox = (props) => {
+  return <div className="search-box container">
+          <form onSubmit={e => e.preventDefault()}>
+          <input type="text" placeholder="Search..."
+            autoFocus={true}
+            required={true}
+            value={props.query}
+            onChange={ev => props.search(ev.target.value, true)}/>
+          <button className="fa fa-times" type="reset"
+            onClick={() => props.search("")}>
+          </button>
+          </form>
+         </div>
 }
+
 
 const Ruler = (props) => {
   let pc = props.playPerc + "%";
@@ -55,9 +54,7 @@ export class Player extends React.Component {
       tracks: [],
       current_file: -1,
       current_track: -1,
-
       query: "",
-
       playback: "paused", // playing, paused, loading, error
       duration: 0,
       playPerc: 0
@@ -67,7 +64,7 @@ export class Player extends React.Component {
     this.loadTracks();
     this.scrollBreak = 0;
 
-    this.reload_debounced = debounce(this.reload, 200);
+    this.reload_debounced = _.debounce(this.reload, 200);
 
     this.initAudio();
 
@@ -102,7 +99,7 @@ export class Player extends React.Component {
     }
     let pname = stateMap[this.state.playback]
 
-    return <footer className="player-controls">
+    return <footer>
             <Ruler
               seek={this.seek.bind(this)}
               playPerc={this.state.playPerc}/>
@@ -144,7 +141,9 @@ export class Player extends React.Component {
   }
 
   render() {
+    let bg = this.state.cover ? `url("${this.state.cover}")` : null
     return <div id="player">
+            <div className="cover" style={{backgroundImage: bg}}/>
             <div className="scrollable" ref="scrollable">
               <SearchBox
                 search={this.search.bind(this)}
@@ -210,7 +209,8 @@ export class Player extends React.Component {
     this.setState({
       current_file: track.file_id,
       current_track: index,
-      duration: track.duration
+      duration: track.duration,
+      cover: null
     });
 
     document.title = `${track.title} by ${track.performer}`;
@@ -219,6 +219,9 @@ export class Player extends React.Component {
     this.audio.src = file_url;
     this.audio.load();
     this.audio.play();
+
+    lastfm.trackCover(track.performer, track.title)
+          .then(cover => this.setState({cover}));
   }
 
   seek(scale) {
