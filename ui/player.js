@@ -103,18 +103,25 @@ export class Player extends React.Component {
             <Ruler
               seek={this.seek.bind(this)}
               playPerc={this.state.playPerc}/>
-            <button onClick={this.jump.bind(this, -1)}>
-              <i className="fa fa-backward"></i>
-            </button>
-            <button onClick={this.togglePlay.bind(this)}>
-              <i className={pname}></i>
-            </button>
-            <button onClick={this.jump.bind(this, 1)}>
-              <i className="fa fa-forward"></i>
-            </button>
-            <button>
-              <i className="fa fa-heart-o"></i>
-            </button>
+            <div className="controls">
+              <div className="primary-buttons">
+                <button onClick={this.jump.bind(this, -1)}>
+                  <i className="fa fa-backward"></i>
+                </button>
+                <button onClick={this.togglePlay.bind(this)}>
+                  <i className={pname}></i>
+                </button>
+                <button onClick={this.jump.bind(this, 1)}>
+                  <i className="fa fa-forward"></i>
+                </button>
+                <button>
+                  <i className="fa fa-heart-o"></i>
+                </button>
+              </div>
+
+              <div className="extra-buttons"></div>
+
+            </div>
            </footer>
   }
 
