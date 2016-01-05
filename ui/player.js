@@ -19,6 +19,16 @@ function mod(n, m) {
   return ((n % m) + m) % m;
 }
 
+function scrollIntoView(el) {
+  if (el) {
+    if (el.scrollIntoViewIfNeeded) {
+      el.scrollIntoViewIfNeeded();
+    } else {
+      el.scrollIntoView();
+    }
+  }
+}
+
 
 const SearchBox = (props) => {
   return <div className="search-box container">
@@ -141,6 +151,7 @@ export class Player extends React.Component {
       }
 
       return <div className={cname} key={t.file_id}
+                  ref={active ? scrollIntoView : null}
                   onClick={this.playTrack.bind(this, i)}>
               <div className="track-left">
                 <div className="title">{t.title}</div>
