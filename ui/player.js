@@ -125,9 +125,6 @@ export class Player extends React.Component {
                 <button onClick={this.jump.bind(this, 1)}>
                   <i className="fa fa-forward"></i>
                 </button>
-                <button>
-                  <i className="fa fa-heart-o"></i>
-                </button>
                 <button
                   className={this.state.shuffle ? "toggled" : null}
                   onClick={this.toggleShuffle.bind(this)}>
