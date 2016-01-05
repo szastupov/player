@@ -34,6 +34,11 @@ button:active {
   text-shadow: none;
 }
 
+button.toggled {
+  background-color: rgba(255, 255, 255, 0.05);
+  .drop-shadow;
+}
+
 .cover {
   background-size: cover;
   background-position: center;
@@ -62,7 +67,7 @@ footer {
   height: @controls-height;
 
   button {
-    width: 25%;
+    width: 20%;
     border: none;
     background: none;
     height: 90%;
@@ -78,6 +83,7 @@ footer {
   .primary-buttons {
     flex-grow: 1;
     height: 100%;
+    margin: 0px 5px 0px 5px;
   }
 
   .extra-buttons {

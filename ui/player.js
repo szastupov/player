@@ -57,7 +57,8 @@ export class Player extends React.Component {
       query: "",
       playback: "paused", // playing, paused, loading, error
       duration: 0,
-      playPerc: 0
+      playPerc: 0,
+      shuffle: localStorage.shuffle
     }
 
     this.loader = new Loader();
@@ -116,6 +117,11 @@ export class Player extends React.Component {
                 </button>
                 <button>
                   <i className="fa fa-heart-o"></i>
+                </button>
+                <button
+                  className={this.state.shuffle ? "toggled" : null}
+                  onClick={this.toggleShuffle.bind(this)}>
+                  <i className="fa fa-random"></i>
                 </button>
               </div>
 
@@ -251,7 +257,18 @@ export class Player extends React.Component {
     }
   }
 
+  toggleShuffle() {
+    let enable = !this.state.shuffle;
+    console.log("shuffle is ", enable ? "on" : "off");
+    this.setState({ shuffle: enable });
+    localStorage.shuffle = enable;
+  }
+
   jump(i) {
-    this.playTrack(this.state.current_track + i);
+    if (this.state.shuffle) {
+      this.playTrack(_.random(0, this.state.tracks.length));
+    } else {
+      this.playTrack(this.state.current_track + i);
+    }
   }
 }
