@@ -209,8 +209,7 @@ export class Player extends React.Component {
     this.setState({
       current_file: track.file_id,
       current_track: index,
-      duration: track.duration,
-      cover: null
+      duration: track.duration
     });
 
     document.title = `${track.title} by ${track.performer}`;
