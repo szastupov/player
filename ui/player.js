@@ -72,7 +72,7 @@ export class Player extends React.Component {
       playback: "paused", // playing, paused, loading, error
       duration: 0,
       playPerc: 0,
-      shuffle: localStorage.shuffle
+      shuffle: localStorage.shuffle === 'true'
     }
 
     this.loader = new Loader();
