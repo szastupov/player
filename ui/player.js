@@ -31,9 +31,13 @@ function scrollIntoView(el) {
 
 
 const SearchBox = (props) => {
+  let hideForm = e => {
+    e.preventDefault();
+    document.activeElement.blur();
+  }
   return <div className="search-box container">
-          <form onSubmit={e => e.preventDefault()}>
-          <input type="text" placeholder="Search..."
+          <form onSubmit={hideForm}>
+          <input type="search" placeholder="Search..."
             autoFocus={true}
             required={true}
             value={props.query}
