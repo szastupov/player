@@ -182,7 +182,7 @@ export class Player extends React.Component {
   componentDidMount() {
     let view = this.refs.scrollable;
     view.addEventListener("scroll", ev => {
-      let scrollBreak = view.scrollHeight - 350;
+      let scrollBreak = view.scrollHeight - 400;
       let scrolled = scrollBreak - view.scrollTop <= view.clientHeight;
       if (scrolled &&
           scrollBreak > this.scrollBreak &&

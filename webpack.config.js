@@ -1,4 +1,5 @@
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var AppCachePlugin = require('appcache-webpack-plugin');
 
 module.exports = {
   context: __dirname + "/ui",
@@ -24,7 +25,6 @@ module.exports = {
       {
         test: /\.less$/,
         loader: ExtractTextPlugin.extract(
-          // activate source maps via loader query
           'css?sourceMap!' +
           'less?sourceMap'
         )
@@ -33,8 +33,12 @@ module.exports = {
   },
 
   plugins: [
-    // extract inline css into separate 'styles.css'
-    new ExtractTextPlugin('styles.css')
+    new ExtractTextPlugin('styles.css'),
+    new AppCachePlugin({
+      cache: ['cassette9.png', 'index.html'],
+      settings: ['prefer-online'],
+      output: 'manifest.appcache'
+    })
   ],
 
   devServer: {

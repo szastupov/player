@@ -1,0 +1,17 @@
+CACHE MANIFEST
+# 81e36cd306cc55cda216
+
+ui.js
+styles.css
+ui.js.map
+styles.css.map
+
+CACHE:
+cassette9.png
+index.html
+
+NETWORK:
+*
+
+SETTINGS:
+prefer-online

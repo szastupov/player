@@ -8,12 +8,13 @@
     "start": "node ./index.js",
     "dist": "webpack -p --progress",
     "watch": "webpack -w --progress",
-    "dev": "webpack-dev-server --progress --host 0.0.0.0"
+    "dev": "webpack-dev-server --progress --inline --hot --host 0.0.0.0"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "appcache-webpack-plugin": "^1.2.1",
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
