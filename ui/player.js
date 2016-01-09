@@ -182,7 +182,8 @@ export class Player extends React.Component {
     let view = document.querySelector("body");
     view.onscroll = ev => {
       let scrollBreak = view.scrollHeight - 400;
-      let scrolled = scrollBreak - view.scrollTop <= view.clientHeight;
+      let scrollTop = document.documentElement.scrollTop;
+      let scrolled = scrollBreak - scrollTop <= view.clientHeight;
       if (scrolled &&
           scrollBreak > this.scrollBreak &&
           this.loader.hasMore())
