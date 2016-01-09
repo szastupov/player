@@ -6,6 +6,7 @@ import LastFM from './lastfm'
 
 
 const lastfm = new LastFM("2de5147bbf48165a1fe12dc052afb725")
+const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
 
 
 function toHHSS(sec) {
@@ -182,8 +183,8 @@ export class Player extends React.Component {
     let view = document.querySelector("body");
     view.onscroll = ev => {
       let scrollBreak = view.scrollHeight - 400;
-      let scrollTop = document.documentElement.scrollTop;
-      let scrolled = scrollBreak - scrollTop <= view.clientHeight;
+      let top = isFirefox ? document.documentElement.scrollTop : view.scrollTop;
+      let scrolled = scrollBreak - top <= view.clientHeight;
       if (scrolled &&
           scrollBreak > this.scrollBreak &&
           this.loader.hasMore())
