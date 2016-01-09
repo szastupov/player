@@ -125,22 +125,22 @@ export class Player extends React.Component {
   renderTracks() {
     return this.state.tracks.map((t, i) => {
       let active = t.file_id == this.state.current_file;
-      let cname = active ? "track active" : "track";
       let search = (e) => {
         this.search('"' + t.performer + '"');
         e.stopPropagation();
       }
 
       return (
-        <div className={cname} key={t.file_id}
-             ref={active ? scrollIntoView : null}
-             onClick={() => this.playTrack(i)}>
+        <li className={active ? "active" : null}
+            key={t.file_id}
+            ref={active ? scrollIntoView : null}
+            onClick={() => this.playTrack(i)}>
           <div className="title">{t.title}</div>
           <a href="#" className="performer" onClick={search}>
             {t.performer || "Unknown"}
           </a>
           <div className="duration">{toHHSS(t.duration)}</div>
-        </div>
+        </li>
       )
     })
   }
@@ -153,7 +153,7 @@ export class Player extends React.Component {
             <SearchBox
               search={this.search.bind(this)}
               query={this.state.query}/>
-            <div className="track-list container">{this.renderTracks()}</div>
+            <ul className="track-list container">{this.renderTracks()}</ul>
             {this.renderControls()}
            </div>
   }
