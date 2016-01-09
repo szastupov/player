@@ -1,0 +1,31 @@
+.search-box {
+  padding: 1em;
+  font-size: 1.8em;
+  color: @text-color;
+
+  input {
+    width: 100%;
+    padding: 6px 12px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+    background: none;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  }
+
+  input:focus {
+    border-color: #fff;
+    outline: 0;
+  }
+
+  input:not(:valid) ~ button {
+    display: none;
+  }
+
+  button {
+    position: relative;
+    float: right;
+    margin-right: 6px;
+    margin-top: -1.5em;
+  }
+}

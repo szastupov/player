@@ -1,0 +1,49 @@
+.track-list {
+  padding: 0;
+
+  li {
+    border-bottom: thin solid fade(#ccc, 30%);
+    padding: 0.7em 1.7em;
+    cursor: pointer;
+    position: relative;
+    list-style: none;
+    transition: all ease-out .2s;
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 5em;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.02);
+      .drop-shadow;
+    }
+
+    &:active {
+      text-shadow: none;
+    }
+
+    &.active,
+    &.active:hover {
+      background-color: rgba(212, 212, 212, 0.35);
+      .drop-shadow;
+    }
+
+    .performer {
+      font-size: 1em;
+      color: inherit;
+      font-weight: 500;
+    }
+
+    .title {
+      font-size: @item-font-size;
+      font-weight: 500;
+    }
+
+    .duration {
+      position: absolute;
+      right: 1.7em;
+      bottom: 30%;
+    }
+  }
+}
