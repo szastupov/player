@@ -1,5 +1,4 @@
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var AppCachePlugin = require('appcache-webpack-plugin');
 
 module.exports = {
   context: __dirname + "/ui",
@@ -33,18 +32,14 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('styles.css'),
-    new AppCachePlugin({
-      cache: ['cassette9.png', 'index.html'],
-      settings: ['prefer-online'],
-      output: 'manifest.appcache'
-    })
+    new ExtractTextPlugin('styles.css')
   ],
 
   devServer: {
     contentBase: "dist",
     proxy: {
-      "*": process.env.BOT_URL
+      "/files/*": process.env.BOT_URL,
+      "/tracks*": process.env.BOT_URL
     },
     noInfo: true
   }

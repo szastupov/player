@@ -169,19 +169,17 @@ export class Player extends React.Component {
     let bg = this.state.cover ? `url("${this.state.cover}")` : null
     return <div id="player">
             <div className="cover" style={{backgroundImage: bg}}/>
-            <div className="scrollable" ref="scrollable">
-              <SearchBox
-                search={this.search.bind(this)}
-                query={this.state.query}/>
-              <div className="track-list container">{this.renderTracks()}</div>
-            </div>
+            <SearchBox
+              search={this.search.bind(this)}
+              query={this.state.query}/>
+            <div className="track-list container">{this.renderTracks()}</div>
             {this.renderControls()}
            </div>
   }
 
   componentDidMount() {
-    let view = this.refs.scrollable;
-    view.addEventListener("scroll", ev => {
+    let view = document.querySelector("body");
+    view.onscroll = ev => {
       let scrollBreak = view.scrollHeight - 400;
       let scrolled = scrollBreak - view.scrollTop <= view.clientHeight;
       if (scrolled &&
@@ -192,7 +190,7 @@ export class Player extends React.Component {
         this.scrollBreak = scrollBreak;
         this.loadTracks();
       }
-    })
+    }
   }
 
   loadTracks() {
