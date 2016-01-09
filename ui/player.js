@@ -3,32 +3,11 @@ import ReactDOM from 'react-dom'
 import Loader from './loader'
 import _ from 'lodash'
 import LastFM from './lastfm'
+import {toHHSS, mod, scrollIntoView} from './utils'
 
 
 const lastfm = new LastFM("2de5147bbf48165a1fe12dc052afb725")
 const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
-
-
-function toHHSS(sec) {
-  let hours = parseInt(sec / 3600) % 24;
-  let minutes = parseInt(sec / 60) % 60;
-  let seconds = sec % 60;
-  return minutes + ':' + ((seconds < 10) ? '0' + seconds : seconds);
-}
-
-function mod(n, m) {
-  return ((n % m) + m) % m;
-}
-
-function scrollIntoView(el) {
-  if (el) {
-    if (el.scrollIntoViewIfNeeded) {
-      el.scrollIntoViewIfNeeded();
-    } else {
-      el.scrollIntoView();
-    }
-  }
-}
 
 
 const SearchBox = (props) => {
