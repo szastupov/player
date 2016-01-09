@@ -131,17 +131,17 @@ export class Player extends React.Component {
         e.stopPropagation();
       }
 
-      return <div className={cname} key={t.file_id}
-                  ref={active ? scrollIntoView : null}
-                  onClick={this.playTrack.bind(this, i)}>
-              <div className="track-left">
-                <div className="title">{t.title}</div>
-                <a href="#" className="performer" onClick={search}>
-                  {t.performer || "Unknown"}
-                </a>
-              </div>
-              <div className="duration">{toHHSS(t.duration)}</div>
-             </div>
+      return (
+        <div className={cname} key={t.file_id}
+             ref={active ? scrollIntoView : null}
+             onClick={() => this.playTrack(i)}>
+          <div className="title">{t.title}</div>
+          <a href="#" className="performer" onClick={search}>
+            {t.performer || "Unknown"}
+          </a>
+          <div className="duration">{toHHSS(t.duration)}</div>
+        </div>
+      )
     })
   }
 
