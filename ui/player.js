@@ -169,6 +169,7 @@ export class Player extends React.Component {
     let bg = this.state.cover ? `url("${this.state.cover}")` : null
     return <div id="player">
             <div className="cover" style={{backgroundImage: bg}}/>
+            <div className="cover-glass"/>
             <SearchBox
               search={this.search.bind(this)}
               query={this.state.query}/>

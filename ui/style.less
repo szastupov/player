@@ -23,7 +23,6 @@ body {
 #player {
   -webkit-user-select: none;
   user-select: none;
-  background-color: @blured-color;
 }
 
 body {
@@ -59,8 +58,12 @@ button.toggled {
   opacity: 0.8;
 }
 
-.scrollable {
+.cover-glass {
+  background-color: @blured-color;
   height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: -1;
 }
 
 footer {
