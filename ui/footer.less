@@ -1,35 +1,24 @@
 footer {
-  background-color: rgba(30, 30, 30, 0.93);
-  -webkit-backdrop-filter: blur(3px);
-  font-size: 2em;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-  height: @controls-height;
+  font-size: 1.5em;
 
   button {
     width: 25%;
-    height: 90%;
-    padding-top: 0px;
+    text-align: center;
+  }
+
+  button.playback {
+    width: 50%;
+  }
+
+  button.active {
+  }
+
+  button.inactive {
+    color: grey;
   }
 
   .controls {
     height: 100%;
-    display: flex;
-  }
-
-  .primary-buttons {
-    flex-grow: 1;
-    height: 100%;
-    margin: 0px 5px 0px 5px;
-  }
-
-  .extra-buttons {
-    flex-grow: 2;
-    height: 100%;
-
-    @media screen and (max-width: 1024px) {
-      display: none;
-    }
+    padding: 0.5em 0.2em;
   }
 }

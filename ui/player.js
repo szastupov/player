@@ -99,25 +99,18 @@ export class Player extends React.Component {
               seek={this.seek.bind(this)}
               playPerc={this.state.playPerc}/>
             <div className="controls">
-              <div className="primary-buttons">
-                <button onClick={this.jump.bind(this, -1)}>
-                  <i className="fa fa-backward"></i>
-                </button>
-                <button onClick={this.togglePlay.bind(this)}>
-                  <i className={pname}></i>
-                </button>
-                <button onClick={this.jump.bind(this, 1)}>
-                  <i className="fa fa-forward"></i>
-                </button>
-                <button
-                  className={this.state.shuffle ? "toggled" : null}
-                  onClick={this.toggleShuffle.bind(this)}>
-                  <i className="fa fa-random"></i>
-                </button>
-              </div>
-
-              <div className="extra-buttons"></div>
-
+              <button className="playback"
+                onClick={this.togglePlay.bind(this)}>
+                <i className={pname}></i>
+              </button>
+              <button className={false ? "active" : "inactive"}>
+                <i className="fa fa-heart-o"></i>
+              </button>
+              <button
+                className={this.state.shuffle ? "active" : "inactive"}
+                onClick={this.toggleShuffle.bind(this)}>
+                <i className="fa fa-random"></i>
+              </button>
             </div>
            </footer>
   }
@@ -134,12 +127,15 @@ export class Player extends React.Component {
         <li className={active ? "active" : null}
             key={t.file_id}
             ref={active ? scrollIntoView : null}
-            onClick={() => this.playTrack(i)}>
-          <div className="title">{t.title}</div>
-          <a href="#" className="performer" onClick={search}>
-            {t.performer || "Unknown"}
-          </a>
-          <div className="duration">{toHHSS(t.duration)}</div>
+            >
+          <div className="track" onClick={() => this.playTrack(i)}>
+            <div className="title">{t.title}</div>
+            <a href="#" className="performer" onClick={search}>
+              {t.performer || "Unknown"}
+            </a>
+            <div className="duration">{toHHSS(t.duration)}</div>
+          </div>
+          { active ? this.renderControls() : null }
         </li>
       )
     })
@@ -154,7 +150,6 @@ export class Player extends React.Component {
               search={this.search.bind(this)}
               query={this.state.query}/>
             <ul className="track-list container">{this.renderTracks()}</ul>
-            {this.renderControls()}
            </div>
   }
 

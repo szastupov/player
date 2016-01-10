@@ -3,9 +3,7 @@
 
   li {
     border-bottom: thin solid fade(#ccc, 30%);
-    padding: 0.7em 1.7em;
     cursor: pointer;
-    position: relative;
     list-style: none;
     transition: all ease-out .2s;
 
@@ -25,8 +23,13 @@
 
     &.active,
     &.active:hover {
-      background-color: rgba(212, 212, 212, 0.35);
+      position: sticky;
+      position: -webkit-sticky;
+      top:0px;
+      bottom: 0px;
+      background-color: rgba(170, 170, 170, 0.15);
       .drop-shadow;
+      -webkit-backdrop-filter: blur(5px);
     }
 
     .performer {
@@ -41,9 +44,12 @@
     }
 
     .duration {
-      position: absolute;
-      right: 1.7em;
-      bottom: 30%;
+      display: inline-block;
+      float: right;
+    }
+
+    .track {
+      padding: 0.7em 1.7em;
     }
   }
 }
