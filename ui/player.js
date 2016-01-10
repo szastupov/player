@@ -5,16 +5,17 @@ import _ from 'lodash'
 import LastFM from './lastfm'
 import {toHHSS, mod, scrollIntoView} from './utils'
 
-
-const lastfm = new LastFM("2de5147bbf48165a1fe12dc052afb725")
-const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+let lastfm = new LastFM("2de5147bbf48165a1fe12dc052afb725")
+let isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
 
 
 const SearchBox = (props) => {
+
   let hideForm = e => {
-    e.preventDefault();
-    document.activeElement.blur();
+    e.preventDefault()
+    document.activeElement.blur()
   }
+
   return <div className="search-box container">
           <form onSubmit={hideForm}>
           <input type="search" placeholder="Search..."
@@ -31,9 +32,8 @@ const SearchBox = (props) => {
 
 
 const Ruler = (props) => {
-  let pc = props.playPerc + "%";
-
-  let onClick = (ev) => props.seek(ev.clientX / ev.target.clientWidth);
+  let pc = props.playPerc + "%"
+  let onClick = (ev) => props.seek(ev.clientX / ev.target.clientWidth)
   return <div className="ruler" onClick={onClick}>
           <div className="bar" style={{width: pc}}/>
           <div className="playhead" style={{left: pc}}/>
@@ -43,26 +43,23 @@ const Ruler = (props) => {
 
 export class Player extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       tracks: [],
-      current_file: -1,
-      current_track: -1,
+      track: null,
+      track_index: -1,
       query: "",
       playback: "paused", // playing, paused, loading, error
-      duration: 0,
       playPerc: 0,
       shuffle: localStorage.shuffle === 'true'
     }
 
-    this.loader = new Loader();
-    this.loadTracks();
-    this.scrollBreak = 0;
+    this.loader = new Loader(tracks => this.setState({ tracks }))
+    this.scrollBreak = 0
 
-    this.reload_debounced = _.debounce(this.reload, 200);
+    this.reload_debounced = _.debounce(this.reload, 200)
 
-    this.initAudio();
-
+    this.initAudio()
   }
 
   initAudio() {
@@ -70,17 +67,17 @@ export class Player extends React.Component {
     let aon = (ev, listener) => audio.addEventListener(ev, listener)
 
     aon("error", () => {
-      console.error("audio error", audio.error);
-      this.setState({ playback: "error" });
+      console.error("audio error", audio.error)
+      this.setState({ playback: "error" })
     })
     aon("loadstart", () => this.setState({ playback: "loading" }))
     aon("pause", () => this.setState({ playback: "paused" }))
     aon("playing", () => this.setState({ playback: "playing" }))
     aon("ended", () => this.jump(1))
     aon("timeupdate", () => {
-      let newpos = parseInt(audio.currentTime*100 / this.state.duration);
+      let newpos = parseInt(audio.currentTime*100 / this.state.track.duration)
       if (newpos !== this.state.playPerc) {
-        this.setState({ playPerc: newpos });
+        this.setState({ playPerc: newpos })
       }
     })
   }
@@ -116,10 +113,10 @@ export class Player extends React.Component {
 
   renderTracks() {
     return this.state.tracks.map((t, i) => {
-      let active = t.file_id == this.state.current_file;
+      let active = this.state.track && this.state.track.file_id == t.file_id
       let search = (e) => {
-        this.search('"' + t.performer + '"');
-        e.stopPropagation();
+        this.search('"' + t.performer + '"')
+        e.stopPropagation()
       }
 
       return (
@@ -153,40 +150,35 @@ export class Player extends React.Component {
   }
 
   componentDidMount() {
-    let view = document.querySelector("body");
+    let view = document.querySelector("body")
     view.onscroll = ev => {
-      let scrollBreak = view.scrollHeight - 400;
-      let top = isFirefox ? document.documentElement.scrollTop : view.scrollTop;
-      let scrolled = scrollBreak - top <= view.clientHeight;
+      let scrollBreak = view.scrollHeight - 400
+      let top = isFirefox ? document.documentElement.scrollTop : view.scrollTop
+      let scrolled = scrollBreak - top <= view.clientHeight
       if (scrolled &&
           scrollBreak > this.scrollBreak &&
           this.loader.hasMore())
       {
-        console.log("load more");
-        this.scrollBreak = scrollBreak;
-        this.loadTracks();
+        console.log("load more")
+        this.scrollBreak = scrollBreak
+        this.loader.load()
       }
     }
   }
 
-  loadTracks() {
-    this.loader.load().then(tracks => this.setState({ tracks }))
-  }
-
   reload(text) {
-    console.log("searching", text);
-    this.loader = new Loader(text);
-    this.loadTracks();
-    this.scrollBreak = 0;
+    console.log("searching", text)
+    this.loader.reset(text)
+    this.scrollBreak = 0
   }
 
   search(text, debounced) {
-    this.setState({ query: text });
+    this.setState({ query: text })
 
     if (debounced) {
-      this.reload_debounced(text);
+      this.reload_debounced(text)
     } else {
-      this.reload(text);
+      this.reload(text)
     }
   }
 
@@ -195,7 +187,7 @@ export class Player extends React.Component {
     index = mod(index, tracks.length);
     let track = tracks[index];
 
-    if (track.file_id === this.state.current_file) {
+    if (this.state.track && this.state.track.file_id === track.file_id) {
       switch (this.state.playback) {
         case "playing":
           return this.audio.pause();
@@ -204,42 +196,35 @@ export class Player extends React.Component {
       }
     }
 
-    console.log("Playing ", track.performer, track.title, track.file_id);
+    console.log("Playing ", track.performer, track.title, track.file_id)
+    document.title = `${track.title} by ${track.performer}`
+
     this.setState({
-      current_file: track.file_id,
-      current_track: index,
-      duration: track.duration
-    });
-
-    document.title = `${track.title} by ${track.performer}`;
-
-    let file_url = "./files/" + track.file_id;
-    this.audio.src = file_url;
-    this.audio.load();
-    this.audio.play();
+      track: track,
+      track_index: index
+    })
+    this.audio.src = "./files/" + track.file_id
+    this.audio.load()
+    this.audio.play()
 
     lastfm.trackCover(track.performer, track.title)
-          .then(cover => this.setState({cover}));
+          .then(cover => this.setState({cover}))
   }
 
   seek(scale) {
-    let pos = parseInt(scale * this.state.duration);
-    console.log("seek", pos);
-    this.audio.currentTime = pos;
+    let pos = parseInt(scale * this.state.track.duration)
+    console.log("seek", pos)
+    this.audio.currentTime = pos
   }
 
   togglePlay() {
-    if (this.state.current_track === -1) {
-      return this.playTrack(0);
-    }
-
     switch (this.state.playback) {
       case "playing":
-        this.audio.pause();
-        break;
+        this.audio.pause()
+        break
       case "paused":
-        this.audio.play();
-        break;
+        this.audio.play()
+        break
     }
   }
 
@@ -254,7 +239,7 @@ export class Player extends React.Component {
     if (this.state.shuffle) {
       this.playTrack(_.random(0, this.state.tracks.length));
     } else {
-      this.playTrack(this.state.current_track + i);
+      this.playTrack(this.state.track_index + i);
     }
   }
 }
