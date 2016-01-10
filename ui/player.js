@@ -99,8 +99,7 @@ export class Player extends React.Component {
               seek={this.seek.bind(this)}
               playPerc={this.state.playPerc}/>
             <div className="controls">
-              <button className="playback"
-                onClick={this.togglePlay.bind(this)}>
+              <button onClick={this.togglePlay.bind(this)}>
                 <i className={pname}></i>
               </button>
               <button className={false ? "active" : "inactive"}>

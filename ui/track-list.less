@@ -3,7 +3,6 @@
 
   li {
     border-bottom: thin solid fade(#ccc, 30%);
-    cursor: pointer;
     list-style: none;
     transition: all ease-out .2s;
 
@@ -41,6 +40,9 @@
     .title {
       font-size: @item-font-size;
       font-weight: 500;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .duration {
@@ -49,6 +51,7 @@
     }
 
     .track {
+      cursor: pointer;
       padding: 0.7em 1.7em;
     }
   }
