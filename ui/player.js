@@ -102,6 +102,9 @@ export class Player extends React.Component {
               <button className={false ? "active" : "inactive"}>
                 <i className="fa fa-heart-o"></i>
               </button>
+              <button>
+                <i className="fa fa-hashtag"></i>
+              </button>
               <button
                 className={this.state.shuffle ? "active" : "inactive"}
                 onClick={() => this.toggleShuffle()}>
