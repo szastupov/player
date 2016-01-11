@@ -96,19 +96,19 @@ export class Player extends React.Component {
               seek={this.seek.bind(this)}
               playPerc={this.state.playPerc}/>
             <div className="controls">
-              <button onClick={() => this.togglePlay()}>
-                <i className={pname}></i>
-              </button>
-              <button className={false ? "active" : "inactive"}>
-                <i className="fa fa-heart-o"></i>
-              </button>
-              <button>
-                <i className="fa fa-hashtag"></i>
-              </button>
               <button
                 className={this.state.shuffle ? "active" : "inactive"}
                 onClick={() => this.toggleShuffle()}>
                 <i className="fa fa-random"></i>
+              </button>
+              <button onClick={() => this.togglePlay()}>
+                <i className={pname}></i>
+              </button>
+              <button>
+                <i className="fa fa-hashtag"></i>
+              </button>
+              <button className={false ? "active" : "inactive"}>
+                <i className="fa fa-heart-o"></i>
               </button>
             </div>
            </footer>
