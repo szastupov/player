@@ -90,15 +90,15 @@ export class Player extends React.Component {
       paused: "fa fa-play"
     }
     let pname = stateMap[this.state.playback]
+    let liked = this.state.track.liked
 
     return <footer>
             <Ruler
               seek={this.seek.bind(this)}
               playPerc={this.state.playPerc}/>
             <div className="controls">
-              <button
-                className={this.state.shuffle ? "active" : "inactive"}
-                onClick={() => this.toggleShuffle()}>
+              <button className={this.state.shuffle ? "active" : "inactive"}
+                      onClick={() => this.toggleShuffle()}>
                 <i className="fa fa-random"></i>
               </button>
               <button onClick={() => this.togglePlay()}>
@@ -107,8 +107,9 @@ export class Player extends React.Component {
               <button>
                 <i className="fa fa-hashtag"></i>
               </button>
-              <button className={false ? "active" : "inactive"}>
-                <i className="fa fa-heart-o"></i>
+              <button className={liked ? "active" : "inactive"}
+                      onClick={() => this.likeTrack()}>
+                <i className={liked ? "fa fa-heart" : "fa fa-heart-o"}></i>
               </button>
             </div>
            </footer>
@@ -236,6 +237,12 @@ export class Player extends React.Component {
     console.log("shuffle is ", enable ? "on" : "off");
     this.setState({ shuffle: enable });
     localStorage.shuffle = enable;
+  }
+
+  likeTrack() {
+    let track = this.state.track
+    track.liked = !track.liked
+    this.setState({track})
   }
 
   jump(i) {
