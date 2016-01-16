@@ -1,4 +1,4 @@
-import qs from 'qs'
+import querystring from 'querystring'
 
 export default class LastFM {
   constructor(api_key) {
@@ -12,7 +12,7 @@ export default class LastFM {
       format: 'json'
     }, options)
 
-    return fetch(this.url + '?' + qs.stringify(query))
+    return fetch(this.url + '?' + querystring.stringify(query))
       .then(resp => resp.json())
   }
 
