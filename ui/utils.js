@@ -1,3 +1,6 @@
+const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+const isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1
+
 export function toHHSS(sec) {
   let hours = parseInt(sec / 3600) % 24
   let minutes = parseInt(sec / 60) % 60
@@ -17,4 +20,10 @@ export function scrollIntoView(el) {
       el.scrollIntoView()
     }
   }
+}
+
+export function getScrollTop(el) {
+  if (isFirefox) return document.documentElement.scrollTop
+  if (isChrome) return window.pageYOffset
+  return el.scrollTop
 }

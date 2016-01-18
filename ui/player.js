@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom'
 import Loader from './loader'
 import _ from 'lodash'
 import LastFM from './lastfm'
-import {toHHSS, mod, scrollIntoView} from './utils'
+import {toHHSS, mod, scrollIntoView, getScrollTop} from './utils'
 
 let lastfm = new LastFM("2de5147bbf48165a1fe12dc052afb725")
-let isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
 
 
 const SearchBox = (props) => {
@@ -155,9 +154,9 @@ export class Player extends React.Component {
 
   componentDidMount() {
     let view = document.querySelector("body")
-    view.onscroll = ev => {
+    window.onscroll = ev => {
       let scrollBreak = view.scrollHeight - 400
-      let top = isFirefox ? document.documentElement.scrollTop : view.scrollTop
+      let top = getScrollTop(view)
       let scrolled = scrollBreak - top <= view.clientHeight
       if (scrolled &&
           scrollBreak > this.scrollBreak &&
