@@ -167,6 +167,8 @@ export class Player extends React.Component {
         this.loader.load()
       }
     }
+
+    window.player = this;
   }
 
   reload(text) {
