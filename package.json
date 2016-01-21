@@ -8,7 +8,8 @@
     "start": "node ./index.js",
     "dist": "webpack -p --progress",
     "watch": "webpack -w --progress",
-    "dev": "webpack-dev-server --progress --inline --hot --host 0.0.0.0"
+    "dev": "webpack-dev-server --progress --inline --hot --host 0.0.0.0",
+    "desktop": "electron desktop.js"
   },
   "keywords": [],
   "author": "",
