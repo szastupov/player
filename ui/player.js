@@ -171,6 +171,12 @@ export class Player extends React.Component {
     window.player = this;
   }
 
+  focusSearch() {
+    let input = document.querySelector('input[type="search"]')
+    input.focus()
+    scrollIntoView(input)
+  }
+
   reload(text) {
     console.log("searching", text)
     this.loader.reset(text)
