@@ -1,4 +1,4 @@
-require("./style.less");
+require("./styles/style.less");
 require("whatwg-fetch");
 var FastClick = require('fastclick');
 var React = require("react");
