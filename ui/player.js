@@ -75,9 +75,8 @@ export class Player extends React.Component {
     aon("ended", () => this.jump(1))
     aon("timeupdate", () => {
       let newpos = parseInt(audio.currentTime*100 / this.state.track.duration)
-      if (newpos !== this.state.playPerc) {
+      if (newpos !== this.state.playPerc)
         this.setState({ playPerc: newpos })
-      }
     })
   }
 
@@ -186,11 +185,10 @@ export class Player extends React.Component {
   search(text, debounced) {
     this.setState({ query: text })
 
-    if (debounced) {
+    if (debounced)
       this.reload_debounced(text)
-    } else {
+    else
       this.reload(text)
-    }
   }
 
   playTrack(index) {
@@ -240,10 +238,10 @@ export class Player extends React.Component {
   }
 
   toggleShuffle() {
-    let enable = !this.state.shuffle;
-    console.log("shuffle is ", enable ? "on" : "off");
-    this.setState({ shuffle: enable });
-    localStorage.shuffle = enable;
+    let enable = !this.state.shuffle
+    console.log("shuffle is ", enable ? "on" : "off")
+    this.setState({ shuffle: enable })
+    localStorage.shuffle = enable
   }
 
   likeTrack() {
@@ -253,10 +251,9 @@ export class Player extends React.Component {
   }
 
   jump(i) {
-    if (this.state.shuffle) {
-      this.playTrack(_.random(0, this.state.tracks.length));
-    } else {
-      this.playTrack(this.state.track_index + i);
-    }
+    if (this.state.shuffle)
+      this.playTrack(_.random(0, this.state.tracks.length))
+    else
+      this.playTrack(this.state.track_index + i)
   }
 }

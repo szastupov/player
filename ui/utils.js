@@ -14,11 +14,10 @@ export function mod(n, m) {
 
 export function scrollIntoView(el) {
   if (el) {
-    if (el.scrollIntoViewIfNeeded) {
+    if (el.scrollIntoViewIfNeeded)
       el.scrollIntoViewIfNeeded()
-    } else {
+    else
       el.scrollIntoView()
-    }
   }
 }
 
