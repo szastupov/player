@@ -102,9 +102,6 @@ export class Player extends React.Component {
               <button onClick={() => this.togglePlay()}>
                 <i className={pname}></i>
               </button>
-              <button>
-                <i className="fa fa-hashtag"></i>
-              </button>
               <button className={liked ? "active" : "inactive"}
                       onClick={() => this.likeTrack()}>
                 <i className={liked ? "fa fa-heart" : "fa fa-heart-o"}></i>
