@@ -8,7 +8,7 @@ It designed mostly for phones but works just as well on desktops and tablets.
 ## Getting started
 You need a running instance of the music bot, refer to its [readme](https://github.com/szastupov/musicbot/blob/master/README.md) to get it up and running.
 
-Thn fire up your console and run:
+Then fire up your console and run:
 
 ```
 $ npm install
