@@ -1,12 +1,10 @@
 Player is a web app to stream music from [music bot](https://github.com/szastupov/musicbot).
 
-It designed mostly for phones but works just as well on desktops and tablets.
-
 ![Mobile](http://i.imgur.com/VtJK1pO.png)
 ![Desktop](http://i.imgur.com/JhMNnSJ.jpg)
 
 ## Getting started
-You need a running instance of the music bot, refer to its [readme](https://github.com/szastupov/musicbot/blob/master/README.md) to get it up and running.
+You need a running instance of the music bot, refer to the bot's [readme](https://github.com/szastupov/musicbot/blob/master/README.md) to get it up and running.
 
 Then fire up your console and run:
 
